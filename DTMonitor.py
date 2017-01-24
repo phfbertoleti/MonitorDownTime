@@ -7,6 +7,7 @@ import pyping
 #variaveis globais
 ContaTwetterDoSeuProvedorDeInternet = "@NEToficial"
 NomeDaSuaCidade = "Sao Bernardo do Campo - SP"
+APIKeyThingSpeak = 'KKKKKKKKKKKKKKKK'   #substitua KKKKKKKKKKKKKKKK pela sua api_key
 
 #Downtime monitor variables
 TimestampInicial_DownTime = 0
@@ -48,28 +49,40 @@ def VerificaERegistraDowntime(res):
         NumeroDowntimesDetectados = NumeroDowntimesDetectados + 1
 		EstaOffline = 0
         EnviaTweet(DownTimeTotal)
-
+		EnviaDownTimeThingSpeak(DownTimeTotal)
 		return
 
-def EnviaTweet(DTDuration):
+def EnviaTweet(DuracaoDT):
 	global ContaTwetterDoSeuProvedorDeInternet
 	global NomeDaSuaCidade
+	global APIKeyThingSpeak
         
         
-    StringToTweet = ContaTwetterDoSeuProvedorDeInternet+", foi detectado um downtime de "+str(DTDuration)+" segundos. Estou na cidade de "+NomeDaSuaCidade+". #DownTimeDetectado"
-	params = urllib.urlencode({'api_key': 'KKKKKKKKKKKKKKKK', 'status': StringToTweet})  #substitua KKKKKKKKKKKKKKKK pela sua api_key
+    StringParaTwettar = ContaTwetterDoSeuProvedorDeInternet+", foi detectado um downtime de "+str(DuracaoDT)+" segundos. Estou na cidade de "+NomeDaSuaCidade+". #DownTimeDetectado"
+	params = urllib.urlencode({'api_key': APIKeyThingSpeak, 'status': StringParaTwettar})  
 	conn = httplib.HTTPConnection("api.thingspeak.com:80")
 	conn.request("POST","/apps/thingtweet/1/statuses/update",params)
 	resp = conn.getresponse()
 	conn.close()
 
 def EnviaTweetDownTimeIniciado():
-    StringToTweet = "Monitor de DownTime iniciado!"
-	params = urllib.urlencode({'api_key': 'KKKKKKKKKKKKKKKK', 'status': StringToTweet})   #substitua KKKKKKKKKKKKKKKK pela sua api_key
+	global APIKeyThingSpeak
+
+    StringParaTwettar = "Monitor de DownTime iniciado!"
+	params = urllib.urlencode({'api_key': APIKeyThingSpeak, 'status': StringParaTwettar})  
 	conn = httplib.HTTPConnection("api.thingspeak.com:80")
 	conn.request("POST","/apps/thingtweet/1/statuses/update",params)
 	resp = conn.getresponse()
 	conn.close()
+	
+def EnviaDownTimeThingSpeak(DuracaoDT):	  	
+	global APIKeyThingSpeak
+
+	params = urllib.urlencode({'field1': str(DuracaoDT),'key': APIKeyThingSpeak})
+    headers = {"Content-typZZe": "application/x-www-form-urlencoded","Accept": "text/plain"}
+    conn = httplib.HTTPConnection("api.thingspeak.com:80")
+    conn.request("POST", "/update", params, headers) # Tenta fazer uma requisicao
+    resp = conn.getresponse() # Recebe e imprimi na tela a resposta
 
 
 #----------------------
