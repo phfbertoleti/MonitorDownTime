@@ -4,7 +4,7 @@ import os
 import time
 
 #variaveis globais
-ContaTwetterDoSeuProvedorDeInternet = "@NEToficial"
+ContaTwitterDoSeuProvedorDeInternet = "@NEToficial"
 NomeDaSuaCidade = "Sao Bernardo do Campo - SP"
 APIKeyThingSpeak = 'KKKKKKKKKKKKKKKK'   #substitua KKKKKKKKKKKKKKKK pela sua api_key
 WriteAPIKey = 'WWWWWWWWWWWWWWWW'   #substitua WWWWWWWWWWWWWWWW pela sua write api key do seu canal
@@ -53,12 +53,12 @@ def VerificaERegistraDowntime(res):
 		return
 
 def EnviaTweet(DuracaoDT):
-	global ContaTwetterDoSeuProvedorDeInternet
+	global ContaTwitterDoSeuProvedorDeInternet
 	global NomeDaSuaCidade
 	global APIKeyThingSpeak
         
         
-        StringParaTwettar = ContaTwetterDoSeuProvedorDeInternet+", foi detectado um downtime de "+str(DuracaoDT)+" segundos. Estou na cidade de "+NomeDaSuaCidade+". #DownTimeDetectado"
+        StringParaTwettar = ContaTwitterDoSeuProvedorDeInternet+", foi detectado um downtime de "+str(DuracaoDT)+" segundos. Estou na cidade de "+NomeDaSuaCidade+". #DownTimeDetectado"
 	params = urllib.urlencode({'api_key': APIKeyThingSpeak, 'status': StringParaTwettar})  
 	conn = httplib.HTTPConnection("api.thingspeak.com:80")
 	conn.request("POST","/apps/thingtweet/1/statuses/update",params)
