@@ -41,7 +41,12 @@ def VerificaERegistraDowntime(res):
         #Verifica se internet estava off e agora esta on
 	if ((res == 0) and (EstaOffline == 1)):
 		DownTimeTotal = time.time() - TimestampInicial_DownTime
-		StringDT =  "DownTime detectado: "+str(DownTimeTotal)+" segundos offline\n"
+
+		if (DownTimeTotal > (1800)):  #se maior que 30min, deve ser descontada da fatura
+			StringDT =  "DownTime detectado (>30min): "+str(DownTimeTotal)+" segundos offline\n"
+		else:	
+			StringDT =  "DownTime detectado (<30min): "+str(DownTimeTotal)+" segundos offline\n"
+		
 	        print StringDT
 		TxtFile = open(ArquivoRelatorioDowntime,"a")
 		TxtFile.write(StringDT)
